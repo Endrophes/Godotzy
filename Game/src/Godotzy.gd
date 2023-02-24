@@ -3,13 +3,7 @@ extends Node2D
 # Store Dice
 var diceStorage = [];
 var rollButton;
-
-# Recursive loop to find all nodes with a specific class
-func findAllByClass(node: Node, className : String, result : Array) -> void:
-	if node.is_class(className):
-		result.push_back(node)
-	for child in node.get_children():
-		findAllByClass(child, className, result)
+var score = 0;
 
 # Recursive loop to find all nodes with a specific Name
 func findAllByName(node: Node, nodeName : String, result : Array) -> void:
@@ -33,10 +27,17 @@ func _ready():
 	rollButton = self.get_node("Roll")
 #	print(rollButton)
 	rollButton.connect("pressed", self, "_Roll_The_Dice")
+	
+	get_node("ScoreDisplay").text = str(score);
 
 func _Roll_The_Dice():
-	print("ROLLEN ROLLEN ROLLEN")
-
+#	print("ROLLEN ROLLEN ROLLEN")
+	for die in diceStorage:
+		die._roll();
+		score += die._getValue();
+	
+	get_node("ScoreDisplay").text = str(score);
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
