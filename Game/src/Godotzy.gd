@@ -62,9 +62,9 @@ func _Roll_The_Dice():
 
 	var score = 0;
 	for die in diceStorage:
-		die._roll();
-		score += die._getValue();
-		valueStorage[die._getValue()] += 1;
+		var dieValue = die._roll();
+		score += dieValue
+		valueStorage[dieValue] += 1;
 	
 #	print(valueStorage);
 	
