@@ -22,9 +22,9 @@ custom_fonts/font = ExtResource( 3 )
 text = "Roll"
 
 [node name="PatternDisplay" type="Label" parent="."]
-margin_left = 159.0
+margin_left = 251.0
 margin_top = 41.0
-margin_right = 288.0
+margin_right = 380.0
 margin_bottom = 78.0
 custom_fonts/font = ExtResource( 3 )
 text = "Striaght"
@@ -61,17 +61,19 @@ text = "0"
 align = 1
 valign = 1
 
-[node name="Dice1" parent="." instance=ExtResource( 2 )]
-position = Vector2( 373, 256 )
+[node name="DiceStorage" type="Node" parent="."]
 
-[node name="Dice2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 464, 255 )
+[node name="Dice1" parent="DiceStorage" instance=ExtResource( 2 )]
+position = Vector2( 433, 333 )
 
-[node name="Dice3" parent="." instance=ExtResource( 2 )]
-position = Vector2( 557, 254 )
+[node name="Dice2" parent="DiceStorage" instance=ExtResource( 2 )]
+position = Vector2( 519, 333 )
 
-[node name="Dice4" parent="." instance=ExtResource( 2 )]
-position = Vector2( 428, 335 )
+[node name="Dice3" parent="DiceStorage" instance=ExtResource( 2 )]
+position = Vector2( 605, 333 )
 
-[node name="Dice5" parent="." instance=ExtResource( 2 )]
-position = Vector2( 501, 334 )
+[node name="Dice4" parent="DiceStorage" instance=ExtResource( 2 )]
+position = Vector2( 476, 256 )
+
+[node name="Dice5" parent="DiceStorage" instance=ExtResource( 2 )]
+position = Vector2( 562, 256 )
