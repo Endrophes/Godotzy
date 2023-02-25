@@ -2,68 +2,54 @@ extends Node2D
 class_name Dice
 
 # Preload Dice faces
-var die1 = preload("res://assets/Images/dieWhite1.png")
-var die2 = preload("res://assets/Images/dieWhite2.png")
-var die3 = preload("res://assets/Images/dieWhite3.png")
-var die4 = preload("res://assets/Images/dieWhite4.png")
-var die5 = preload("res://assets/Images/dieWhite5.png")
-var die6 = preload("res://assets/Images/dieWhite6.png")
+var dieFaces = {
+	1 : preload("res://assets/Images/dieWhite1.png"),
+	2 : preload("res://assets/Images/dieWhite2.png"),
+	3 : preload("res://assets/Images/dieWhite3.png"),
+	4 : preload("res://assets/Images/dieWhite4.png"),
+	5 : preload("res://assets/Images/dieWhite5.png"),
+	6 : preload("res://assets/Images/dieWhite6.png")
+};
+
 
 # Declare member variables here. Examples:
 var value = 1;
 var isLocked = false;
+
+# Sub-Nodes
 var selectedImage;
+var dieSprite;
+var lockButton;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var button = get_node("Button")
-	button.connect("pressed", self, "_button_pressed")
-	selectedImage = get_node("Selected")
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	if InputEventMouse:
-#		print("HIT")
+	lockButton    = get_node("Button");
+	selectedImage = get_node("Selected");
+	dieSprite     = get_node("Die");
+	
+	lockButton.connect("pressed", self, "_button_pressed");
 
 func _button_pressed():
 	isLocked = !isLocked;
-	var alphaLevel = 0;
-	if isLocked:
-		alphaLevel = 1;
 		
-	selectedImage.modulate.a = alphaLevel
+	# this is a Ternary... It works... but I hate it.
+	# Normal:   [Expression] [true] [false]
+	# GDScript: [true] [Expression] [false] :P
+	selectedImage.modulate.a = (1 if isLocked else 0);
 	# print(alphaLevel)
-	
+
+# Change the value of the die
 func _roll():
+	# Don't roll if locked
 	if !isLocked:
 		value = 0;
+		# Keep rolling till we get a value that's not zero
 		while value == 0:
-			value = randi() % 7;
+			value = randi() % 7; #Note: Its Exclusive
 #		print("New Value:", value);
-		_changeSprite();
-	else:
-#		print("Nope");
-		return;
-
-func _changeSprite():
-	var newTexture = die1;
+		dieSprite.set_texture(dieFaces[value]);
 	
-	match (value):
-		1 :
-			newTexture = die1;
-		2 :
-			newTexture = die2;
-		3 :
-			newTexture = die3;
-		4 :
-			newTexture = die4;
-		5 :
-			newTexture = die5;
-		6:
-			newTexture = die6;
-	
-	var dieSprite = get_node("Die");
-	dieSprite.set_texture(newTexture);
+	return value;
 
 func _getValue():
 	return value;
