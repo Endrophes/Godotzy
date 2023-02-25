@@ -21,7 +21,7 @@ margin_bottom = 562.0
 custom_fonts/font = ExtResource( 3 )
 text = "Roll"
 
-[node name="RollStatus" type="Label" parent="."]
+[node name="PatternDisplay" type="Label" parent="."]
 margin_left = 159.0
 margin_top = 41.0
 margin_right = 288.0
