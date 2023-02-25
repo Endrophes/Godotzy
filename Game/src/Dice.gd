@@ -1,7 +1,7 @@
 extends Node2D
 class_name Dice
 
-# Preload
+# Preload Dice faces
 var die1 = preload("res://assets/Images/dieWhite1.png")
 var die2 = preload("res://assets/Images/dieWhite2.png")
 var die3 = preload("res://assets/Images/dieWhite3.png")
@@ -32,7 +32,7 @@ func _button_pressed():
 		alphaLevel = 1;
 		
 	selectedImage.modulate.a = alphaLevel
-	print(alphaLevel)
+	# print(alphaLevel)
 	
 func _roll():
 	if !isLocked:
