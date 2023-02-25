@@ -1,89 +1,98 @@
 extends Node2D
 
-# Store Dice
-var diceStorage = [];
-var valueStorage = {};
+# Nodes componets
 var rollButton;
-var score = 0;
+var scoreDisplay;
+var patternDisplay;
 
-# Recursive loop to find all nodes with a specific Name
-func findAllByName(node: Node, nodeName : String, result : Array) -> void:
-	if node.name.begins_with(nodeName):
-		result.push_back(node)
-	for child in node.get_children():
-		findAllByName(child, nodeName, result)
-		
-# Recursive loop to find the first node with a specific Name
-func findByName(node: Node, nodeName : String, result : Node) -> void:
-	if node.name.begins_with(nodeName):
-		result = node
-		return
-	for child in node.get_children():
-		findByName(child, nodeName, result)
+# Holds the dice nodes
+var diceStorage = [];
+
+# Holds the count for all face values
+var valueStorage = {
+	1 : 0,
+	2 : 0,
+	3 : 0,
+	4 : 0,
+	5 : 0,
+	6 : 0
+};
+
+# Holds all the string values for the pattern names
+const patternNames = {
+	0 : "None",
+	1 : "Large Straight",
+	2 : "Small Straight",
+	3 : "Full House",
+	4 : "GODOTZY!",
+	5 : "4 of a kind",
+	6 : "3 of a kind",
+	7 : "2 of a kind"
+};
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	findAllByName(self, "Dice", diceStorage)
-	print(diceStorage)
-	rollButton = self.get_node("Roll")
-#	print(rollButton)
-	rollButton.connect("pressed", self, "_Roll_The_Dice")
+	# Get all components
+	#TODO:
+	# I really should find another way to get the nodes
+	# Change the name, break the code
+	diceStorage    = get_node("DiceStorage").get_children();
+	rollButton     = get_node("Roll");
+	scoreDisplay   = get_node("ScoreDisplay");
+	patternDisplay = get_node("PatternDisplay");
 	
-	get_node("ScoreDisplay").text = str(score);
+	rollButton.connect("pressed", self, "_Roll_The_Dice");
+	
+#	print(diceStorage);
+#	print(rollButton);
 	
 	_reset();
-
+	
+# Sets everything back to start values
 func _reset():
-	valueStorage = {
-		1 : 0,
-		2 : 0,
-		3 : 0,
-		4 : 0,
-		5 : 0,
-		6 : 0
-	};
+	scoreDisplay.text = str(0);
+	for dieFace in valueStorage:
+		valueStorage[dieFace] = 0;
 	return;
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
 
 # Rolls all the dice
 func _Roll_The_Dice():
 #	print("ROLLEN ROLLEN ROLLEN")
-	
+	_reset();
+
+	var score = 0;
 	for die in diceStorage:
 		die._roll();
 		score += die._getValue();
 		valueStorage[die._getValue()] += 1;
 	
-	print(valueStorage);
+#	print(valueStorage);
 	
-	get_node("ScoreDisplay").text = str(score);
-	_checkPattern();
-
-# Determines the dice pattern based on the dice face
-func _checkPattern():
-	var dicePattern = "None";
+	scoreDisplay.text = str(score);
 	
-	if _IsLargeStraight():
-		dicePattern = "Large Straight";
+	# Order of the if checks covers other smaller patterns
+	# EX:
+	# * With a full house, you have 2 and 3 of a kind.
+	# * A Large and Small Straight make the other patterns not possible
+	
+	# Determines the dice pattern based on the dice face
+	
+	if   _IsLargeStraight():
+		patternDisplay.text = patternNames[1];
 	elif _IsSmallStraight():
-		dicePattern = "Small Straight";
+		patternDisplay.text = patternNames[2];
 	elif _IsFullHouse():
-		dicePattern = "Full House";
+		patternDisplay.text = patternNames[3];
 	elif _IsGodotzy():
-		dicePattern = "GODOTZY!";
+		patternDisplay.text = patternNames[4];
 	elif _IsFourOfAKind():
-		dicePattern = "4 of a kind";
+		patternDisplay.text = patternNames[5];
 	elif _IsThreeOfAKind():
-		dicePattern = "3 of a kind";
+		patternDisplay.text = patternNames[6];
 	elif _IsTwoOfAKind():
-		dicePattern = "2 of a kind";
-	
-	get_node("PatternDisplay").text = dicePattern;
-	
-	_reset();
+		patternDisplay.text = patternNames[7];
+	else:
+		patternDisplay.text = patternNames[0];
 	
 	return;
 	
@@ -130,7 +139,7 @@ func _IsFullHouse():
 		elif faceValue == 3:
 			foundPair = true;
 			
-	return foundPair && foundTrip;
+	return (foundPair && foundTrip);
 
 # See if all small numbers have one
 func _IsSmallStraight():
