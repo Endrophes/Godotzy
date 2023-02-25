@@ -38,7 +38,7 @@ func _roll():
 	if !isLocked:
 		value = 0;
 		while value == 0:
-			value = randi() % 6;
+			value = randi() % 7;
 #		print("New Value:", value);
 		_changeSprite();
 	else:
