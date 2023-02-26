@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Dice",
 "language": "GDScript",
 "path": "res://src/Dice.gd"
+}, {
+"base": "Node",
+"class": "MainAudio",
+"language": "GDScript",
+"path": "res://src/AudioPlayers.gd"
 } ]
 _global_script_class_icons={
-"Dice": ""
+"Dice": "",
+"MainAudio": ""
 }
 
 [application]
