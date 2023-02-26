@@ -4,6 +4,7 @@ extends Node2D
 var rollButton;
 var scoreDisplay;
 var patternDisplay;
+var audioController;
 
 # Holds the dice nodes
 var diceStorage = [];
@@ -36,10 +37,11 @@ func _ready():
 	#TODO:
 	# I really should find another way to get the nodes
 	# Change the name, break the code
-	diceStorage    = get_node("DiceStorage").get_children();
-	rollButton     = get_node("Roll");
-	scoreDisplay   = get_node("ScoreDisplay");
-	patternDisplay = get_node("PatternDisplay");
+	diceStorage     = get_node("DiceStorage").get_children();
+	rollButton      = get_node("Roll");
+	scoreDisplay    = get_node("ScoreDisplay");
+	patternDisplay  = get_node("PatternDisplay");
+	audioController = get_node("AudioPlayers");
 	
 	rollButton.connect("pressed", self, "_Roll_The_Dice");
 	
@@ -85,6 +87,7 @@ func _Roll_The_Dice():
 		patternDisplay.text = patternNames[3];
 	elif _IsGodotzy():
 		patternDisplay.text = patternNames[4];
+		audioController._PlayEffect();
 	elif _IsFourOfAKind():
 		patternDisplay.text = patternNames[5];
 	elif _IsThreeOfAKind():
