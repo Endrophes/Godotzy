@@ -20,3 +20,5 @@ texture = ExtResource( 1 )
 [node name="Selected" type="Sprite" parent="."]
 modulate = Color( 1, 1, 1, 0 )
 texture = ExtResource( 2 )
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]
