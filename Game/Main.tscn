@@ -1,15 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Assets/Images/BlueSquare.png" type="Texture" id=1]
 [ext_resource path="res://actors/Dice.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Fonts/ButtonFont.tres" type="DynamicFont" id=3]
 [ext_resource path="res://src/Godotzy.gd" type="Script" id=4]
+[ext_resource path="res://assets/Music/MusicLoop.ogg" type="AudioStream" id=5]
+[ext_resource path="res://assets/Sounds/Godotzy.ogg" type="AudioStream" id=6]
+[ext_resource path="res://src/AudioPlayers.gd" type="Script" id=7]
 
 [node name="Root" type="Node2D"]
 script = ExtResource( 4 )
 
 [node name="BlueSquare" type="Sprite" parent="."]
-position = Vector2( 511.5, 301 )
+position = Vector2( 513, 302 )
 scale = Vector2( 12.7875, 7.55 )
 texture = ExtResource( 1 )
 
@@ -77,3 +80,14 @@ position = Vector2( 476, 256 )
 
 [node name="Dice5" parent="DiceStorage" instance=ExtResource( 2 )]
 position = Vector2( 562, 256 )
+
+[node name="AudioPlayers" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="Music" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource( 5 )
+volume_db = -10.0
+autoplay = true
+
+[node name="Effect" type="AudioStreamPlayer" parent="AudioPlayers"]
+stream = ExtResource( 6 )
