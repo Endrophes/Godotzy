@@ -11,21 +11,29 @@ var dieFaces = {
 	6 : preload("res://assets/Images/dieWhite6.png")
 };
 
+var dieRolls = {
+	0 : preload("res://assets/Sounds/dieThrow1.ogg"),
+	1 : preload("res://assets/Sounds/dieThrow2.ogg"),
+};
 
 # Declare member variables here. Examples:
 var value = 1;
 var isLocked = false;
+var playRollSound = false;
+var RollSoundDelay = float(0.0);
 
 # Sub-Nodes
 var selectedImage;
 var dieSprite;
 var lockButton;
+var speaker;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	lockButton    = get_node("Button");
 	selectedImage = get_node("Selected");
 	dieSprite     = get_node("Die");
+	speaker       = get_node("AudioPlayer");
 	
 	lockButton.connect("pressed", self, "_button_pressed");
 
@@ -48,8 +56,28 @@ func _roll():
 			value = randi() % 7; #Note: Its Exclusive
 #		print("New Value:", value);
 		dieSprite.set_texture(dieFaces[value]);
+		
+		playRollSound = true;
+		RollSoundDelay = (randi() % 2) - randf();
+#		print("RollSoundDelay: ", RollSoundDelay)
 	
 	return value;
 
 func _getValue():
 	return value;
+
+func _playRollSound():
+	var rollSound = randi() % 2;
+	speaker.set_stream(dieRolls[rollSound]);
+	speaker.set_volume_db(randi() % 6);
+	speaker.play();
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if playRollSound:
+		RollSoundDelay -= delta;
+		if RollSoundDelay <= 0:
+			RollSoundDelay = 0;
+			_playRollSound();
+			playRollSound = false;
+	
